@@ -1,25 +1,11 @@
 <?php
 
-session_start();
-
 include_once './connection.php';
 
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-
-if (!empty($id)) {
-    $query_event = "DELETE FROM events WHERE id=:id";
-    $delete_event = $conn->prepare($query_event);
-    
-    $delete_event->bindParam("id", $id);
-    
-    if($delete_event->execute()){
-        $_SESSION['msg'] = '<div class="alert alert-success" role="alert">O evento foi apagado com sucesso!</div>';
-        header("Location: index.php");
-    }else{
-        $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: O evento não foi apagado com sucesso!</div>';
-        header("Location: index.php");
-    }
-} else {
-    $_SESSION['msg'] = '<div class="alert alert-danger" role="alert">Erro: O evento não foi apagado com sucesso!</div>';
-    header("Location: index.php");
+if (!empty($_POST['id'])) {
+    $stmt = $conn->prepare("DELETE FROM eventos WHERE id=:id");
+    $stmt->bindValue(":id", $_POST['id']);
+    $stmt->execute();
 }
+
+header("Location: index.php");

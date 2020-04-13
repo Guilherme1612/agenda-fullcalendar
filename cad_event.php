@@ -1,32 +1,20 @@
 <?php
-session_start();
 
 include_once './connection.php';
 
-$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
-//Converter a data e hora do formato brasileiro para o formato do Banco de Dados
-$data_start = str_replace('/', '-', $dados['start']);
+$data_start = str_replace('/', '-', $_POST['start']);
 $data_start_conv = date("Y-m-d H:i:s", strtotime($data_start));
 
-$data_end = str_replace('/', '-', $dados['end']);
+$data_end = str_replace('/', '-', $_POST['end']);
 $data_end_conv = date("Y-m-d H:i:s", strtotime($data_end));
 
-$query_event = "INSERT INTO events (title, color, start, end) VALUES (:title, :color, :start, :end)";
-
-$insert_event = $conn->prepare($query_event);
-$insert_event->bindParam(':title', $dados['title']);
-$insert_event->bindParam(':color', $dados['color']);
-$insert_event->bindParam(':start', $data_start_conv);
-$insert_event->bindParam(':end', $data_end_conv);
-
-if ($insert_event->execute()) {
-    $retorna = ['sit' => true, 'msg' => '<div class="alert alert-success" role="alert">Evento cadastrado com sucesso!</div>'];
-    $_SESSION['msg'] = '<div class="alert alert-success" role="alert">Evento cadastrado com sucesso!</div>';
-} else {
-    $retorna = ['sit' => false, 'msg' => '<div class="alert alert-danger" role="alert">Erro: Evento não foi cadastrado com sucesso!</div>'];
-}
+$stmt = $conn->prepare("INSERT INTO eventos (titulo, cor, inicio_evento, fim_evento) VALUES (:titulo, :cor, :inicio_evento, :fim_evento)");
+$stmt->bindValue(':titulo', $_POST['title']);
+$stmt->bindValue(':cor', $_POST['color']);
+$stmt->bindValue(':inicio_evento', $data_start_conv);
+$stmt->bindValue(':fim_evento', $data_end_conv);
+$stmt->execute();
 
 
-header('Content-Type: application/json');
-echo json_encode($retorna);
+header('Location: index.php');
+
