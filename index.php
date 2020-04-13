@@ -61,6 +61,7 @@
                         <dd class="col-sm-9" id="end"></dd>
                     </dl>
                     <button class="btn btn-warning btn-canc-vis">Editar</button>
+                    <a href="" id="apagar_evento" class="btn btn-danger">Apagar</a>
                 </div>
 
                 <div class="formedit">
