@@ -19,15 +19,21 @@
               cachebuster: new Date().valueOf()
           };
       },
+
       eventClick: function (info) {
-          info.jsEvent.preventDefault(); // don't let the browser navigate
-          
-          $('#visualizar #id').text(info.event.id);
-          $('#visualizar #title').text(info.event.title);
-          $('#visualizar #start').text(info.event.start.toLocaleString());
-          $('#visualizar #end').text(info.event.end.toLocaleString());
-          $('#visualizar').modal('show');
-      },
+        info.jsEvent.preventDefault(); // don't let the browser navigate
+        console.log(info.event);
+        $('#visualizar #id').text(info.event.id);
+        $('#visualizar #id').val(info.event.id);
+        $('#visualizar #title').text(info.event.title);
+        $('#visualizar #title').val(info.event.title);
+        $('#visualizar #start').text(info.event.start.toLocaleString());
+        $('#visualizar #start').val(info.event.start.toLocaleString());
+        $('#visualizar #end').text(info.event.end.toLocaleString());
+        $('#visualizar #end').val(info.event.end.toLocaleString());
+        $('#visualizar #color').val(info.event.backgroundColor);
+        $('#visualizar').modal('show');
+    },
       selectable: true,
       select: function (info) {
           //alert('Início do evento: ' + info.start.toLocaleString());
@@ -74,3 +80,56 @@ function DataHora(evento, objeto) {
       event.returnValue = false;
   }
 }
+
+
+$(document).ready(function () {
+    $("#addevent").on("submit", function (event) {
+        event.preventDefault();
+       $.ajax({
+            method: "POST",
+            url: "cad_event.php",
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            success: function (retorna) {
+                if (retorna['sit']) {
+                    //$("#msg-cad").html(retorna['msg']);
+                    location.reload();
+                } else {
+                    $("#msg-cad").html(retorna['msg']);
+                }
+            }
+        })
+    });
+    
+    $('.btn-canc-vis').on("click", function(){
+        $('.visevent').slideToggle();
+        $('.formedit').slideToggle();
+    });
+    
+    $('.btn-canc-edit').on("click", function(){
+        $('.formedit').slideToggle();
+        $('.visevent').slideToggle();
+    });
+    
+    $("#editevent").on("submit", function (event) {
+        event.preventDefault();
+       $.ajax({
+            method: "POST",
+            url: "edit_event.php",
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            success: function (retorna) {
+                if (retorna['sit']) {
+                    //$("#msg-cad").html(retorna['msg']);
+                    location.reload();
+                } else {
+                    $("#msg-edit").html(retorna['msg']);
+                }
+            }
+        })
+    });
+});
+
+
