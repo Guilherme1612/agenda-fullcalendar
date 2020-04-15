@@ -5,14 +5,18 @@ var calendar = new FullCalendar.Calendar(calendarEl, {
     locale: 'pt-br',
     plugins: ['interaction', 'dayGrid', 'list'],
     header: {
-    left: 'prev,next today',
-    center: 'title',
-    right: 'dayGridMonth,listMonth'
+        left: 'prev',
+        center: 'title',
+        right: 'next'
+    },
+    footer:{
+        left: 'today',
+        right: 'dayGridMonth,listMonth'
     },
     
     // fixedWeekCount: false,
     navLinks: true, // can click day/week names to navigate views
-    businessHours: true, // display business hours
+    businessHours: true, 
     editable: true, 
     eventLimit: true, //Limitando visualização da quantidade de eventos por data
     events: 'list_events.php',
